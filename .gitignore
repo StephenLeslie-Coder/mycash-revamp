@@ -1,8 +1,5 @@
 HELP.md
-mvnw
-mvnw.cmd
 .azure
-.mvn
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
