@@ -2,9 +2,11 @@ package com.ctrlaltelite.mycashrevamp.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Cards {
+@Table(name = "cards")
+public class Card {
     @Id
     private int id;
     private int user_id;

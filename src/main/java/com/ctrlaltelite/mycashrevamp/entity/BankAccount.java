@@ -2,8 +2,10 @@ package com.ctrlaltelite.mycashrevamp.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "bank_accounts")
 public class BankAccount {
 
     @Id
