@@ -1,8 +1,6 @@
 package com.ctrlaltelite.mycashrevamp.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -12,9 +10,19 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String wallet_address;
+    @OneToOne
+    @JoinColumn(name = "id")
+    private Wallet wallet;
     private String created_at;
     private String updated_at;
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
 
     public int getId() {
         return id;
@@ -48,13 +56,6 @@ public class User {
         this.password = password;
     }
 
-    public String getWallet_address() {
-        return wallet_address;
-    }
-
-    public void setWallet_address(String wallet_address) {
-        this.wallet_address = wallet_address;
-    }
 
     public String getCreated_at() {
         return created_at;
