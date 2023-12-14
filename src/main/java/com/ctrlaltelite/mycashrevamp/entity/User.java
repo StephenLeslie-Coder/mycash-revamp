@@ -10,6 +10,10 @@ public class User {
     private String username;
     private String email;
     private String password;
+
+
+
+    private String role;
     @OneToOne
     @JoinColumn(name = "id")
     private Wallet wallet;
@@ -71,5 +75,13 @@ public class User {
 
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
