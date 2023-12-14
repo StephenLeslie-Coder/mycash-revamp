@@ -21,30 +21,12 @@ public class Wallet {
         this.userId = userId;
         this.userName = userName;
         this.balance = balance;
-
         this.keyPair = this.generateKeyPair();
-        //this.address = CryptoUtils.generateAddress(this.keyPair.getPublic().toString());
         this.address = this.keyPair.getPublic().toString();
     }
 
-    public Transaction createTransaction(String recipient, double amount,String currencyCode) {
 
-        Transaction transaction = new Transaction(this.getAddress(), recipient, amount, currencyCode);
-        transaction.signTransaction(getKeyPair());
-
-        Balance foundBalance =  balance.stream().filter(x->x.getCurrencyCode().equals(currencyCode)).collect(Collectors.toList()).get(0);
-
-        if(foundBalance==null){
-            throw new RuntimeException("Invalid currency code");
-        }
-        if (!transaction.isValidTransaction(foundBalance,keyPair)) {
-            throw new RuntimeException("Invalid transaction. Check transaction details and balance.");
-        }
-
-        return transaction;
-    }
-
-    public  KeyPair generateKeyPair() {
+    public KeyPair generateKeyPair() {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048,new SecureRandom());

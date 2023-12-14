@@ -30,14 +30,14 @@ public class Blockchain {
         long timestamp = System.currentTimeMillis();
         List<Transaction> transactions = new ArrayList<>(mempool);
         Block newBlock = new Block(previousHash, transactions, timestamp);
-        newBlock.mineBlock(2);
+        newBlock.validateBlock(2);
         chain.add(newBlock);
         mempool.clear();
     }
 
     private void addGenesisBlock() {
         Block genesisBlock = new Block("0", new ArrayList<>(), System.currentTimeMillis());
-        genesisBlock.mineBlock(2);
+        genesisBlock.validateBlock(2);
         chain.add(genesisBlock);
     }
 }

@@ -23,19 +23,4 @@ public class Transaction {
         this.currency = currency;
         timestamp = LocalDate.now();
     }
-
-    public void signTransaction(KeyPair keyPair) {
-        String data = senderAddress+ recipientAddress + amount;
-        this.signature = CryptoUtils.sign(data, keyPair.getPrivate());
-    }
-
-    public boolean verifySignature(KeyPair keyPair) {
-        String data = senderAddress + recipientAddress + amount;
-        return CryptoUtils.verifySignature(data, this.signature, keyPair.getPublic());
-    }
-
-    public boolean isValidTransaction(Balance senderBalance, KeyPair keyPair) {
-
-        return verifySignature(keyPair) && senderBalance.getAmount() >= amount && amount > 0;
-    }
 }
