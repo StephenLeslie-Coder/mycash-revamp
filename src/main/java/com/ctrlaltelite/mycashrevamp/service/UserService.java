@@ -4,7 +4,8 @@ import com.ctrlaltelite.mycashrevamp.entity.User;
 
 public interface UserService {
 
-    public void createUser();
+
+    void createUser(String email, String pw);
 
     public User getUser(String id);
 
