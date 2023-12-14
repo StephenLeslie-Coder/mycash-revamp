@@ -5,12 +5,8 @@ import com.ctrlaltelite.mycashrevamp.exceptions.UserNotFoundException;
 import com.ctrlaltelite.mycashrevamp.model.Wallet;
 import com.ctrlaltelite.mycashrevamp.repository.UserRepository;
 import com.ctrlaltelite.mycashrevamp.service.UserService;
-import com.ctrlaltelite.mycashrevamp.service.WalletService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.sql.Date;
-import java.sql.Timestamp;
 
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -22,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private Wallet walletService;
 
     @Override
-    public void createUser( String email, String pw) {
+    public void createUser(String email, String pw) {
         log.debug("Enter method createUser: {}");
         User createdUser = new User();
 
