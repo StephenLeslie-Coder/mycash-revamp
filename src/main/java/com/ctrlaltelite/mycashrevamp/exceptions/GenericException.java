@@ -1,4 +1,4 @@
-package com.ctrlaltelite.mycashrevamp.exception;
+package com.ctrlaltelite.mycashrevamp.exceptions;
 
 import lombok.Getter;
 
