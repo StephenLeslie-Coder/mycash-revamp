@@ -1,6 +1,6 @@
 package com.ctrlaltelite.mycashrevamp.service.impl;
 
-import com.ctrlaltelite.mycashrevamp.exception.GenericException;
+import com.ctrlaltelite.mycashrevamp.exceptions.GenericException;
 import com.ctrlaltelite.mycashrevamp.model.Balance;
 import com.ctrlaltelite.mycashrevamp.model.Transaction;
 import com.ctrlaltelite.mycashrevamp.service.TransactionService;
