@@ -2,7 +2,7 @@ package com.ctrlaltelite.mycashrevamp.controller;
 
 import com.ctrlaltelite.mycashrevamp.bean.BlockResults;
 import com.ctrlaltelite.mycashrevamp.bean.GenericResponse;
-import com.ctrlaltelite.mycashrevamp.exception.GenericException;
+import com.ctrlaltelite.mycashrevamp.exceptions.GenericException;
 import com.ctrlaltelite.mycashrevamp.model.*;
 import com.ctrlaltelite.mycashrevamp.service.BlockchainService;
 import com.ctrlaltelite.mycashrevamp.service.WalletService;
@@ -46,11 +46,11 @@ public class TestController {
         balance2.setCurrencyCode("JMD");
         balance2.setName("JMD");
 
-        List<Balance> balances = new ArrayList<>();
+        ArrayList<Balance> balances = new ArrayList<>();
         balances.add(balance);
         balances.add(balance2);
-        Wallet wallet = new Wallet("1", "MonoKari", balances);
-        Wallet wallet2 = new Wallet("2", "MonoKari2", balances);
+        Wallet wallet = new Wallet("1", "MonoKari");
+        Wallet wallet2 = new Wallet("2", "MonoKari2");
         try {
             Transaction transaction = walletService.initiateTransaction(wallet2.getAddress(), wallet.getAddress(), 100.0, "JMD", wallet.getKeyPair(), balances);
             blockchainService.processTransaction(transaction);
