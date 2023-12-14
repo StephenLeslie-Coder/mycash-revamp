@@ -4,6 +4,7 @@ import com.ctrlaltelite.mycashrevamp.utils.CryptoUtils;
 import lombok.Data;
 
 import java.security.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,13 +15,13 @@ public class Wallet {
     private String userId;
     private String userName;
     private KeyPair keyPair;
-    private List<Balance> balance;
+    private ArrayList<Balance> balance;
     private String address;
 
-    public Wallet(String userId, String userName,List<Balance> balance) {
+    public Wallet(String userId, String userName) {
         this.userId = userId;
         this.userName = userName;
-        this.balance = balance;
+        this.balance = new ArrayList<Balance>();
         this.keyPair = this.generateKeyPair();
         this.address = this.keyPair.getPublic().toString();
     }

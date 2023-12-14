@@ -1,5 +1,6 @@
 package com.ctrlaltelite.mycashrevamp.service.impl;
 
+import com.ctrlaltelite.mycashrevamp.exceptions.GenericException;
 import com.ctrlaltelite.mycashrevamp.model.Balance;
 import com.ctrlaltelite.mycashrevamp.model.Transaction;
 import com.ctrlaltelite.mycashrevamp.service.TransactionService;
@@ -16,19 +17,19 @@ public class WalletServiceImpl implements WalletService {
     @Autowired
     TransactionService transactionService;
     @Override
-    public Transaction initiateTransaction(String recipientAddress, String senderAddress, double amount, String currencyCode, KeyPair keyPair, List<Balance> balance) {
+    public Transaction initiateTransaction(String recipientAddress, String senderAddress, double amount, String currencyCode, KeyPair keyPair, List<Balance> balance) throws GenericException {
 
         Transaction transaction = new Transaction(senderAddress, recipientAddress, amount, currencyCode);
         String signature = transactionService.signTransaction(senderAddress,recipientAddress,amount,keyPair);
         transaction.setSignature(signature);
 
-        Balance foundBalance =  balance.stream().filter(x->x.getCurrencyCode().equals(currencyCode)).collect(Collectors.toList()).get(0);
+        List<Balance> foundBalance =  balance.stream().filter(x->x.getCurrencyCode().equals(currencyCode)).collect(Collectors.toList());
 
-        if(foundBalance==null){
-            throw new RuntimeException("Invalid currency code");
+        if(foundBalance.isEmpty()){
+            throw new GenericException("Balance not found",400);
         }
-        if (!transactionService.isValidTransaction(transaction,foundBalance,keyPair)) {
-            throw new RuntimeException("Invalid transaction. Check transaction details and balance.");
+        if (!transactionService.isValidTransaction(transaction,foundBalance.get(0),keyPair)) {
+            throw new GenericException("Invalid transaction. Check transaction details and balance.",400);
         }
 
         return transaction;
