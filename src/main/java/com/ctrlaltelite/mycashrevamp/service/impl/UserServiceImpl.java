@@ -7,6 +7,11 @@ import com.ctrlaltelite.mycashrevamp.repository.UserRepository;
 import com.ctrlaltelite.mycashrevamp.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.Collections;
 
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -62,5 +67,23 @@ public class UserServiceImpl implements UserService {
         }
         log.debug("Return method updatedUser: {}", updatedUser);
         return updatedUser;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = repository.findByUsername(s);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + s);
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return repository.existsByUsername(username);
     }
 }
