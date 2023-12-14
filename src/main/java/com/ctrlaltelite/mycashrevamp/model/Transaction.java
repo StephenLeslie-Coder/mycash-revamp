@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.security.KeyPair;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class Transaction {
@@ -33,8 +34,8 @@ public class Transaction {
         return CryptoUtils.verifySignature(data, this.signature, keyPair.getPublic());
     }
 
-    public boolean isValidTransaction(double senderBalance,KeyPair keyPair) {
+    public boolean isValidTransaction(Balance senderBalance, KeyPair keyPair) {
 
-        return verifySignature(keyPair) && senderBalance >= amount && amount > 0;
+        return verifySignature(keyPair) && senderBalance.getAmount() >= amount && amount > 0;
     }
 }

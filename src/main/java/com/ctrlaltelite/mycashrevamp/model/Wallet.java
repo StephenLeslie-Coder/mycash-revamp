@@ -4,6 +4,8 @@ import com.ctrlaltelite.mycashrevamp.utils.CryptoUtils;
 import lombok.Data;
 
 import java.security.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -12,10 +14,10 @@ public class Wallet {
     private String userId;
     private String userName;
     private KeyPair keyPair;
-    private double balance;
+    private List<Balance> balance;
     private String address;
 
-    public Wallet(String userId, String userName,double balance) {
+    public Wallet(String userId, String userName,List<Balance> balance) {
         this.userId = userId;
         this.userName = userName;
         this.balance = balance;
@@ -25,23 +27,21 @@ public class Wallet {
         this.address = this.keyPair.getPublic().toString();
     }
 
-    public Transaction createTransaction(String recipient, double amount) {
+    public Transaction createTransaction(String recipient, double amount,String currencyCode) {
 
-        Transaction transaction = new Transaction(this.getAddress(), recipient, amount, "JMD");
+        Transaction transaction = new Transaction(this.getAddress(), recipient, amount, currencyCode);
         transaction.signTransaction(getKeyPair());
-        if (!transaction.isValidTransaction(balance,keyPair)) {
+
+        Balance foundBalance =  balance.stream().filter(x->x.getCurrencyCode().equals(currencyCode)).collect(Collectors.toList()).get(0);
+
+        if(foundBalance==null){
+            throw new RuntimeException("Invalid currency code");
+        }
+        if (!transaction.isValidTransaction(foundBalance,keyPair)) {
             throw new RuntimeException("Invalid transaction. Check transaction details and balance.");
         }
 
         return transaction;
-    }
-
-    private PublicKey getPublicKey() {
-        return keyPair.getPublic();
-    }
-
-    private PrivateKey getPrivateKey() {
-        return keyPair.getPrivate();
     }
 
     public  KeyPair generateKeyPair() {

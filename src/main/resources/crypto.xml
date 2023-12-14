@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cryptos>
+    <crypto>
+        <name>Bitcoin</name>
+        <symbol>BTC</symbol>
+        <price>100</price>
+    </crypto>
+    <crypto>
+        <name>CTRL</name>
+        <symbol>CTRL</symbol>
+        <price>200</price>
+    </crypto>
+</cryptos>
