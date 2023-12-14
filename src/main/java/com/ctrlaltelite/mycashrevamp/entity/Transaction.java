@@ -1,10 +1,10 @@
 package com.ctrlaltelite.mycashrevamp.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "transactions")
 public class Transaction {
     @Id
     private int transaction_id;
@@ -12,6 +12,8 @@ public class Transaction {
     private String receiver_address;
     private double amount;
     private String transaction_hash;
-    private int block_number;
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    private Block block;
     private LocalDate timestamp;
 }
