@@ -6,8 +6,10 @@ import com.ctrlaltelite.mycashrevamp.bean.SignUpRequest;
 import com.ctrlaltelite.mycashrevamp.entity.User;
 import com.ctrlaltelite.mycashrevamp.repository.UserRepository;
 import com.ctrlaltelite.mycashrevamp.service.UserService;
+import com.ctrlaltelite.mycashrevamp.service.impl.UserServiceImpl;
 import com.ctrlaltelite.mycashrevamp.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -31,7 +35,7 @@ public class AuthController {
     private JWTUtil jwtUtil;
 
     @Autowired
-    private UserService userService;// Your custom user service
+    private UserServiceImpl userService;// Your custom user service
 
     @Autowired
     private UserRepository  userRepository;
@@ -66,4 +70,6 @@ public class AuthController {
 
         return ResponseEntity.ok("User registered successfully!");
     }
+
+
 }

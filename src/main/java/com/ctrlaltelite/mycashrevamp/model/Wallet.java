@@ -2,6 +2,7 @@ package com.ctrlaltelite.mycashrevamp.model;
 
 import com.ctrlaltelite.mycashrevamp.utils.CryptoUtils;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 
 import java.security.*;
 import java.util.ArrayList;
