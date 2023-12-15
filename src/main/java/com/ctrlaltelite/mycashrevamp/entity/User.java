@@ -1,21 +1,38 @@
 package com.ctrlaltelite.mycashrevamp.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String username;
     private String email;
     private String password;
-    @OneToOne
-    @JoinColumn(name = "id")
-    private Wallet wallet;
-    private String created_at;
-    private String updated_at;
 
+    private String role;
+
+//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+//    @JoinColumn(name = "id")
+
+    @OneToOne
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
+    private Wallet wallet;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
     public Wallet getWallet() {
         return wallet;
     }
@@ -56,20 +73,27 @@ public class User {
         this.password = password;
     }
 
-
-    public String getCreated_at() {
-        return created_at;
+    public String getRole() {
+        return role;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
