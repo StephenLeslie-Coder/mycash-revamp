@@ -29,7 +29,7 @@ public class WalletController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         GenericResponse response;
         try {
-            response =walletService.addBalanceToWallet(balanceRequest.getName(), balanceRequest.getAmount(), balanceRequest.getIsCrypto(), balanceRequest.getCurrencyCode(),authentication.getName());
+            response = walletService.addBalanceToWallet(balanceRequest.getName(), balanceRequest.getAmount(), balanceRequest.getIsCrypto(), balanceRequest.getCurrencyCode(),authentication.getName());
 
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

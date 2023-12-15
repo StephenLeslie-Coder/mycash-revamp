@@ -15,4 +15,7 @@ public interface WalletService {
 
     Wallet createWallet(User user);
     public GenericResponse addBalanceToWallet(String name, double amount, boolean isCrypto, String currencyCode, String username) throws GenericException;
+
+    public void adjustBalance(double amount, String currencyCode, String username) throws GenericException;
+
 }

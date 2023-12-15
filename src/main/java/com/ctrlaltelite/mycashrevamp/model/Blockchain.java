@@ -1,7 +1,10 @@
 package com.ctrlaltelite.mycashrevamp.model;
 
 
+import com.ctrlaltelite.mycashrevamp.repository.BlockRepository;
+
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,9 @@ import java.util.List;
 public class Blockchain {
     private List<Block> chain;
     private List<Transaction> mempool;
+
+    @Autowired
+    BlockRepository blockRepository;
 
     public Blockchain() {
         this.chain = new ArrayList<>();
@@ -32,6 +38,16 @@ public class Blockchain {
         Block newBlock = new Block(previousHash, transactions, timestamp);
         newBlock.validateBlock(2);
         chain.add(newBlock);
+
+
+        com.ctrlaltelite.mycashrevamp.entity.Block block = new com.ctrlaltelite.mycashrevamp.entity.Block();
+        block.setHash(newBlock.getHash());
+        block.setPreviousHash(newBlock.getPreviousHash());
+        block.setTransactions(cloneBean(newBlock.getTransactions()));
+        block.setNonce(newBlock.getNonce());
+        block.setTimestamp(newBlock.getTimestamp());
+        blockRepository.save(block);
+
         mempool.clear();
     }
 
@@ -40,6 +56,23 @@ public class Blockchain {
         genesisBlock.validateBlock(2);
         chain.add(genesisBlock);
     }
+
+    private List<com.ctrlaltelite.mycashrevamp.entity.Transaction> cloneBean(List<Transaction> transactions){
+        List<com.ctrlaltelite.mycashrevamp.entity.Transaction> cloneTransactions = new ArrayList<>();
+
+        for(Transaction transaction: transactions){
+            com.ctrlaltelite.mycashrevamp.entity.Transaction clone  = new com.ctrlaltelite.mycashrevamp.entity.Transaction();
+            clone.setAmount(transaction.getAmount());
+            clone.setReceiver_address(transaction.getRecipientAddress());
+            clone.setTimestamp(transaction.getTimestamp());
+            clone.setTimestamp(transaction.getTimestamp());
+            clone.setTransaction_hash(transaction.getSignature());
+            clone.setCurrency(transaction.getCurrency());
+            cloneTransactions.add(clone);
+        }
+
+        return cloneTransactions;
+    };
 }
 
 
