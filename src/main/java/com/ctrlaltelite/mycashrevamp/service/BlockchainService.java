@@ -1,6 +1,6 @@
 package com.ctrlaltelite.mycashrevamp.service;
 
-import com.ctrlaltelite.mycashrevamp.model.Block;
+import com.ctrlaltelite.mycashrevamp.entity.Block;
 import com.ctrlaltelite.mycashrevamp.model.Blockchain;
 import com.ctrlaltelite.mycashrevamp.model.Transaction;
 
@@ -13,7 +13,7 @@ public interface BlockchainService {
 
     public void processTransaction(Transaction transaction) ;
 
-    public void mineBlock();
+    public Block mineBlock();
 
     public Blockchain getBlockchain();
 

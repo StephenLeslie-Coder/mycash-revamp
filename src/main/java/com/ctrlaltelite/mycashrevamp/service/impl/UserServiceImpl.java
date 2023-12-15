@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String id) {
+    public User getUser(String id) throws UserNotFoundException {
         log.debug("Enter method getUser: {}", id);
         User user = new User();
         try {
@@ -78,6 +78,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (UserNotFoundException e) {
             log.error("Error calling getUser. Method params: {}", id);
+            throw e;
         }
         log.debug("Return method getUser: {}", user);
         return user;

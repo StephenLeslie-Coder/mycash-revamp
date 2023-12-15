@@ -1,11 +1,14 @@
 package com.ctrlaltelite.mycashrevamp.service.impl;
 
 import com.ctrlaltelite.mycashrevamp.bean.GenericResponse;
+import com.ctrlaltelite.mycashrevamp.entity.Block;
 import com.ctrlaltelite.mycashrevamp.entity.User;
 import com.ctrlaltelite.mycashrevamp.entity.Wallet;
 import com.ctrlaltelite.mycashrevamp.exceptions.GenericException;
 import com.ctrlaltelite.mycashrevamp.model.Balance;
 import com.ctrlaltelite.mycashrevamp.model.Transaction;
+import com.ctrlaltelite.mycashrevamp.repository.BlockRepository;
+import com.ctrlaltelite.mycashrevamp.repository.TransactionRepository;
 import com.ctrlaltelite.mycashrevamp.repository.UserRepository;
 import com.ctrlaltelite.mycashrevamp.repository.WalletRepository;
 import com.ctrlaltelite.mycashrevamp.service.BalanceService;
@@ -25,6 +28,8 @@ import java.util.stream.Collectors;
 @Service
 public class WalletServiceImpl implements WalletService {
     @Autowired
+    private TransactionRepository transactionRepository;
+    @Autowired
     TransactionService transactionService;
     @Autowired
     WalletRepository walletRepository;
@@ -32,6 +37,8 @@ public class WalletServiceImpl implements WalletService {
     BalanceService balanceService;
     @Autowired
     BlockchainService blockService;
+    @Autowired
+    BlockRepository blockRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -70,36 +77,45 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public GenericResponse addBalanceToWallet(String name, double amount, boolean isCrypto, String currencyCode, String username) throws GenericException {
+        com.ctrlaltelite.mycashrevamp.entity.Balance balance = null;
         try {
 
             User user = userRepository.findByUsername(username);
             if (user == null) {
                 throw new GenericException("User not found", 400);
             }
-            com.ctrlaltelite.mycashrevamp.entity.Balance balance = balanceService.addBalance(name, amount, isCrypto, currencyCode, user.getWallet());
+            balance = balanceService.addBalance(name, amount, isCrypto, currencyCode, user.getWallet());
 
-            Transaction transaction = new Transaction(new String(user.getWallet().getPublic_key(), StandardCharsets.UTF_8), new String(user.getWallet().getPublic_key(), StandardCharsets.UTF_8), amount, currencyCode);
+            Transaction transaction = new Transaction(String.valueOf(user.getWallet().getId()), String.valueOf(user.getWallet().getId()), amount, currencyCode);
+            String signature = transactionService.signTransaction(String.valueOf(user.getWallet().getId()), String.valueOf(user.getWallet().getId()), amount, com.ctrlaltelite.mycashrevamp.model.Wallet.getKeyPairFromBytes(user.getWallet().getPrivate_key(), user.getWallet().getPublic_key()));
+            transaction.setSignature(signature);
+            com.ctrlaltelite.mycashrevamp.entity.Transaction transEntity = new com.ctrlaltelite.mycashrevamp.entity.Transaction();
+            transEntity.setSignature(transaction.getSignature());
+            transEntity.setAmount(transaction.getAmount());
+            transEntity.setSenderAddress(transaction.getSenderAddress());
+            transEntity.setReceiverAddress(transaction.getRecipientAddress());
+            transEntity.setCurrency(transaction.getCurrency());
+            Block block = blockService.mineBlock();
+            blockService.processTransaction(transaction);
+            blockRepository.save(block);
 
-            try {
-                blockService.processTransaction(transaction);
-                blockService.mineBlock();
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
+            transEntity.setBlock(block);
+            transactionRepository.save(transEntity);
 
-            if (balance == null) {
-                throw new GenericException("Balance could not be added.", 400);
-            }
+
             user.getWallet().getBalances().add(balance);
             Wallet wallet = walletRepository.save(user.getWallet());
             return new GenericResponse(200, "Balance added successfully to waller", wallet);
-        } catch (GenericException e) {
-            throw e;
-
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            if (balance == null) {
+                throw new GenericException("Balance could not be added.", 400);
+            }
         }
-
-
+        return null;
     }
+
+
 
     @Override
     public void adjustBalance(double amount, String currencyCode, String username) throws GenericException {

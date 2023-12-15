@@ -1,5 +1,8 @@
 package com.ctrlaltelite.mycashrevamp.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,6 +11,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "users")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +25,6 @@ public class User {
 
     private String role;
 
-//    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-//    @JoinColumn(name = "id")
 
     @OneToOne
     @JoinColumn(name = "wallet_id", referencedColumnName = "id")

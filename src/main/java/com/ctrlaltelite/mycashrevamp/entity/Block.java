@@ -9,15 +9,13 @@ import java.util.List;
 @Table(name = "blocks")
 public class Block {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String previousHash;
 
-    @OneToMany( mappedBy="transaction_id", fetch= FetchType.EAGER)
-    private List<Transaction> transactions;
+    private String previousHash;
     private String hash;
     private long timestamp;
     private int nonce;
-
     public int getId() {
         return id;
     }
@@ -34,13 +32,6 @@ public class Block {
         this.previousHash = previousHash;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
 
     public String getHash() {
         return hash;

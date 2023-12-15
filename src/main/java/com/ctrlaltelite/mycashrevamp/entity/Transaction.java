@@ -1,5 +1,7 @@
 package com.ctrlaltelite.mycashrevamp.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -8,41 +10,43 @@ import java.time.LocalDate;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int transaction_id;
-    private String sender_address;
-    private String receiver_address;
+    private int id;
+
+    private String senderAddress;
+    private String receiverAddress;
     private double amount;
-
     private String currency;
+    private String signature;
 
-    private String transaction_hash;
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "block_id")
     private Block block;
+
+    @CreationTimestamp
     private LocalDate timestamp;
 
-    public int getTransaction_id() {
-        return transaction_id;
+    public int getId() {
+        return id;
     }
 
-    public void setTransaction_id(int transaction_id) {
-        this.transaction_id = transaction_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getSender_address() {
-        return sender_address;
+    public String getSenderAddress() {
+        return senderAddress;
     }
 
-    public void setSender_address(String sender_address) {
-        this.sender_address = sender_address;
+    public void setSenderAddress(String senderAddress) {
+        this.senderAddress = senderAddress;
     }
 
-    public String getReceiver_address() {
-        return receiver_address;
+    public String getReceiverAddress() {
+        return receiverAddress;
     }
 
-    public void setReceiver_address(String receiver_address) {
-        this.receiver_address = receiver_address;
+    public void setReceiverAddress(String receiverAddress) {
+        this.receiverAddress = receiverAddress;
     }
 
     public double getAmount() {
@@ -53,12 +57,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getTransaction_hash() {
-        return transaction_hash;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setTransaction_hash(String transaction_hash) {
-        this.transaction_hash = transaction_hash;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public Block getBlock() {
@@ -77,11 +81,11 @@ public class Transaction {
         this.timestamp = timestamp;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getSignature() {
+        return signature;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }

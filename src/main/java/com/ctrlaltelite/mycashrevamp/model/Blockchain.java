@@ -15,9 +15,6 @@ public class Blockchain {
     private List<Block> chain;
     private List<Transaction> mempool;
 
-    @Autowired
-    BlockRepository blockRepository;
-
     public Blockchain() {
         this.chain = new ArrayList<>();
         this.mempool = new ArrayList<>();
@@ -27,11 +24,11 @@ public class Blockchain {
         mempool.add(paymentTransaction);
     }
 
-    public void minePendingPayments() {
-        minePendingTransactions();
+    public com.ctrlaltelite.mycashrevamp.entity.Block minePendingPayments() {
+        return minePendingTransactions();
     }
 
-    private void minePendingTransactions() {
+    private com.ctrlaltelite.mycashrevamp.entity.Block minePendingTransactions() {
         String previousHash = chain.isEmpty() ? "0" : chain.get(chain.size() - 1).getHash();
         long timestamp = System.currentTimeMillis();
         List<Transaction> transactions = new ArrayList<>(mempool);
@@ -39,16 +36,15 @@ public class Blockchain {
         newBlock.validateBlock(2);
         chain.add(newBlock);
 
-
         com.ctrlaltelite.mycashrevamp.entity.Block block = new com.ctrlaltelite.mycashrevamp.entity.Block();
         block.setHash(newBlock.getHash());
         block.setPreviousHash(newBlock.getPreviousHash());
-        block.setTransactions(cloneBean(newBlock.getTransactions()));
         block.setNonce(newBlock.getNonce());
         block.setTimestamp(newBlock.getTimestamp());
-        blockRepository.save(block);
-
         mempool.clear();
+
+        return block;
+
     }
 
     private void addGenesisBlock() {
@@ -63,10 +59,9 @@ public class Blockchain {
         for(Transaction transaction: transactions){
             com.ctrlaltelite.mycashrevamp.entity.Transaction clone  = new com.ctrlaltelite.mycashrevamp.entity.Transaction();
             clone.setAmount(transaction.getAmount());
-            clone.setReceiver_address(transaction.getRecipientAddress());
+            clone.setReceiverAddress(transaction.getRecipientAddress());
             clone.setTimestamp(transaction.getTimestamp());
             clone.setTimestamp(transaction.getTimestamp());
-            clone.setTransaction_hash(transaction.getSignature());
             clone.setCurrency(transaction.getCurrency());
             cloneTransactions.add(clone);
         }

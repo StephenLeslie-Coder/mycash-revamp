@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 
 import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,5 +40,17 @@ public class Wallet {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static KeyPair getKeyPairFromBytes(byte[] privateKey, byte[] publicKey) {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PrivateKey privKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(privateKey));
+            PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
+            return new KeyPair(pubKey, privKey);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
