@@ -21,5 +21,4 @@ public class LoginRequest {
         this.password = paswword;
     }
 
-
 }

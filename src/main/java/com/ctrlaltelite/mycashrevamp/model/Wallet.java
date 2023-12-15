@@ -2,6 +2,7 @@ package com.ctrlaltelite.mycashrevamp.model;
 
 import com.ctrlaltelite.mycashrevamp.utils.CryptoUtils;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 
 import java.security.*;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Data
+@NoArgsConstructor
 public class Wallet {
     private String userId;
     private String userName;
@@ -28,7 +30,7 @@ public class Wallet {
     }
 
 
-    public KeyPair generateKeyPair() {
+    public static KeyPair generateKeyPair() {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048,new SecureRandom());

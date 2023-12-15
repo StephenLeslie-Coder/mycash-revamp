@@ -9,16 +9,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 public class JWTUtil {
-    private final String SECRET = "your-secret-key"; // Replace with a secure secret key
+    private final String SECRET = "QTYjGz1YC6zqs5R1GqwWZcqEL2xsfy7vtdK2qa887YftJSaQYH9cGn2DhbatVIaXkZ9hrnTTDCCupxCCJuh1oH2B220WL3KJ"; // Replace with a secure secret key
     private final long EXPIRATION_TIME = 900_000; // 15 minutes
 
     public String extractUsername(String token) {
@@ -38,8 +35,10 @@ public class JWTUtil {
         return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String isAdmin,String username) {
         Map<String, Object> claims = new HashMap<>();
+
+        claims.put("role", Collections.singletonList(new SimpleGrantedAuthority(isAdmin)));
         return createToken(claims, username);
     }
 
@@ -76,11 +75,11 @@ public class JWTUtil {
     }
 
     public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parser().setSigningKey("yourSecretKey").parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
 
         String username = claims.getSubject();
 
-        List<String> roles = claims.get("roles", List.class);
+        List<String> roles = claims.get("role", List.class);
         List<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
